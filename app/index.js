@@ -23,31 +23,39 @@ var EveGenerator = yeoman.generators.Base.extend({
     // Have Yeoman greet the user.
     this.log(yosay('Welcome to the marvelous Eve generator!'));
 
-    var prompts = [{
-      type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
-      default: true
+    var prompts = [        {
+      type: 'input',
+      name: 'moduleName',
+      message: 'module name : ',
+      default: this.env.options.appPath
+    }, {
+      type: 'input',
+      name: 'description',
+      message: 'module description : '
     }];
 
     this.prompt(prompts, function (props) {
-      this.someOption = props.someOption;
+      this.moduleName = props.moduleName;
+      this.description = props.description;
 
       done();
     }.bind(this));
   },
 
   app: function () {
-    this.mkdir('app');
-    this.mkdir('app/templates');
+    this.template('_setup.py', 'setup.py');
 
-    this.copy('_package.json', 'package.json');
-    this.copy('_bower.json', 'bower.json');
+    this.mkdir('require');
+    this.mkdir('tests');
+
+    this.mkdir(this.moduleName);
+    this.mkdir(path.join(this.moduleName, 'models'));
+    this.template('_main.py', path.join(this.moduleName, '__main__.py'));
+    this.template('_settings.py', path.join(this.moduleName, 'settings.py'));
   },
 
   projectfiles: function () {
-    this.copy('editorconfig', '.editorconfig');
-    this.copy('jshintrc', '.jshintrc');
+    this.copy('require/common.txt', 'require/common.txt');
   }
 });
 

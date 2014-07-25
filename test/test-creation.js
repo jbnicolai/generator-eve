@@ -20,12 +20,14 @@ describe('eve generator', function () {
   it('creates expected files', function (done) {
     var expected = [
       // add files you expect to exist here.
-      '.jshintrc',
-      '.editorconfig'
+      'setup.py',
+      'test_api/__main__.py',
+      'require/common.txt'
     ];
 
     helpers.mockPrompt(this.app, {
-      'someOption': true
+      'moduleName': 'test_api',
+      'description': 'A test API for testing generator-eve.'
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
@@ -33,4 +35,5 @@ describe('eve generator', function () {
       done();
     });
   });
+
 });
